@@ -4,4 +4,4 @@
 - All ran on Vivado
 
 ## Resources
-- https://www.ece.uvic.ca/~ece449/lab/index.html
+- (ECE 449 Lab Website)[https://www.ece.uvic.ca/~ece449/lab/index.html]
