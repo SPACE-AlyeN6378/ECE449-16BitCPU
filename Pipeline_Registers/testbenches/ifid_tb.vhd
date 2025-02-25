@@ -36,7 +36,7 @@ architecture behavioural of pipeline1_tb is
     
 begin
 	-- Instantiate the pipeline register directly using instantiation
-    UUT: entity work.pipeline_register
+    UUT: entity work.ifid_pipeline_register
     port map (
     	clk => clk, rst => rst, enable => enable,
         instr_in => instr_in, opcode => opcode,
@@ -88,7 +88,3 @@ begin
       
 	end process;
 end behavioural;
-    
-    
-    
-    
