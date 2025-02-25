@@ -3,7 +3,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity pipeline_register is
+entity ifid_pipeline_register is
 
     port (
     	-- CORE INPUTS
@@ -36,10 +36,10 @@ entity pipeline_register is
         r_src: out std_logic_vector(2 downto 0)		-- Source Register address
     );
     
-end pipeline_register;
+end ifid_pipeline_register;
 
 
-architecture behavioural of pipeline_register is
+architecture behavioural of ifid_pipeline_register is
 	
 -- 	signal instr_reg : std_logic_vector(15 downto 0) := (others => '0');  -- Temporary register signal
 --     signal opcode_signal : std_logic_vector(6 downto 0);  -- Temporary opcode signal
@@ -118,10 +118,4 @@ begin
     
     
 end behavioural;      	
-                
-    
-                
-                
-            
-    
     
