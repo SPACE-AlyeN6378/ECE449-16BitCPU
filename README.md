@@ -8,7 +8,6 @@
 
 ## Disregards
 *(Files in github, that dont Fit into current TODO list work)*
-- Program_Counter.vhd
 - XRAM.vhd
 
 
