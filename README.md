@@ -1,12 +1,10 @@
 # ECE449-16BitCPU
 
-## ***TODO*** - *excludes format L and B todo*
-- [x] Decoder 
-- [ ] Finish all wiring of Proc.vhd (datapath)
-- [ ] TB for PROC -> format A
-- [ ] Ensure Writeback functionality
-- [ ] Write Report
-- [ ] Write Presentation
+## ***TODO*** - *excludes format L*
+- [ ] write Report
+- [ ] finish branching top and code
+- [ ] branching TB
+- [ ] write second presentation
 
 ## Disregards
 *(Files in github, that dont Fit into current TODO list work)*
