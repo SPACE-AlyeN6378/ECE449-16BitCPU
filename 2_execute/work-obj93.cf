@@ -1,0 +1,37 @@
+v 4
+file . "../2_execute/cpu_stage3.vhd" "7a314055c6f75a8cd050acead3888ecc1a90c5b6" "20250324075451.146":
+  entity cpuexecute at 1( 0) + 0 on 297;
+  architecture behavioral of cpuexecute at 34( 917) + 0 on 298;
+file . "../2_execute/branch_cu.vhd" "83869a1a51f475009a13134f0669fcec8457a3cc" "20250324075451.061":
+  entity branchcontrolunit at 1( 0) + 0 on 293;
+  architecture behavioral of branchcontrolunit at 26( 625) + 0 on 294;
+file . "../1_decode/cpu_stage2.vhd" "24c7294a60c991027a9c83c9faf07e2b688fd0cf" "20250324075450.976":
+  entity cpudecode at 1( 0) + 0 on 289;
+  architecture behavioral of cpudecode at 40( 1264) + 0 on 290;
+file . "../1_decode/register.vhd" "584368e1d4ed384cad77841a78bb96017fa38284" "20250324075450.886":
+  entity register_file at 1( 0) + 0 on 285;
+  architecture behavioural of register_file at 21( 573) + 0 on 286;
+file . "../0_fetch/cpu_stage1.vhd" "bac88a0b9e3c86005031ad98834cf513a9bcad69" "20250324075450.791":
+  entity cpufetch at 1( 0) + 0 on 281;
+  architecture behavioral of cpufetch at 48( 1624) + 0 on 282;
+file . "../0_fetch/instr_cache.vhd" "9f82f30d673b0df53f94ec71d3d20a76d751e282" "20250324075450.694":
+  entity instruction_cache at 1( 0) + 0 on 277;
+  architecture behavioral of instruction_cache at 15( 366) + 0 on 278;
+file . "../0_fetch/IFID_PIPE.vhd" "3d68f573d01c984dad5e29a5610197e8a844404d" "20250324075450.646":
+  entity ifid_pipeline_register at 2( 26) + 0 on 275;
+  architecture behavioural of ifid_pipeline_register at 47( 1665) + 0 on 276;
+file . "../0_fetch/program_counter.vhd" "1d14664c28167fce793de680b853b963d3403fe0" "20250324075450.740":
+  entity programcounter at 2( 26) + 0 on 279;
+  architecture behavioural of programcounter at 21( 473) + 0 on 280;
+file . "../1_decode/decoder.vhd" "320a611b45ea471a417da7ccf2312c3b664bfed3" "20250324075450.840":
+  entity decoder at 1( 0) + 0 on 283;
+  architecture behavioural of decoder at 35( 1034) + 0 on 284;
+file . "../1_decode/IDEX_PIPE.vhd" "dc7d069fd0609ec77fa0f80898e9269919fe1683" "20250324075450.930":
+  entity idex_pipeline at 2( 25) + 0 on 287;
+  architecture behavioural of idex_pipeline at 46( 1723) + 0 on 288;
+file . "../2_execute/alu.vhd" "a5f1d5c3f7833e6761d067086dbc7e5980c8024a" "20250324075451.017":
+  entity alu_file at 1( 0) + 0 on 291;
+  architecture behavioral of alu_file at 24( 843) + 0 on 292;
+file . "../2_execute/EXMEM_PIPE.vhd" "8477bf305402e678d1b0c9e14df7fb6e955db064" "20250324075451.101":
+  entity exmem_pipeline at 1( 0) + 0 on 295;
+  architecture behavioural of exmem_pipeline at 31( 1240) + 0 on 296;
