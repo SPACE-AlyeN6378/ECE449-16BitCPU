@@ -7,7 +7,7 @@ entity register_file is
 port(
    rst : in std_logic; clk: in std_logic;
     --read signals
-   rd_index1: in std_logic_vector(8 downto 0); 
+   rd_index1: in std_logic_vector(2 downto 0); 
    rd_index2: in std_logic_vector(2 downto 0); 
    rd_data1: out std_logic_vector(15 downto 0); 
    rd_data2: out std_logic_vector(15 downto 0);
