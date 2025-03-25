@@ -41,7 +41,7 @@ begin
 end testbench;
 """
 
-filename = "2_execute/branch_cu.vhd"
+filename = "2_execute/cpu_execute.vhd"
 tb_filename = filename.replace('.', '_tb.')
 
 with open(filename, "r") as vhdl_file:

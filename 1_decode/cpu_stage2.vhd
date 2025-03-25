@@ -49,6 +49,7 @@ architecture Behavioral of CPUDecode is
     signal rc: std_logic_vector(2 downto 0); 	-- Address of register C
     signal c1: std_logic_vector(3 downto 0); 	-- Direct shift value
     signal rd_index1: std_logic_vector(2 downto 0);     -- Address of either A or B, depending on the instructions
+    signal rd_index2: std_logic_vector(2 downto 0);     -- Address of either 
     
     signal disp_l: std_logic_vector(8 downto 0); -- Direct disp values
     signal disp_s: std_logic_vector(5 downto 0);
@@ -83,6 +84,12 @@ architecture Behavioral of CPUDecode is
     constant BR_SUB: std_logic_vector(6 downto 0) := "1000110";
     constant RETURN_OP: std_logic_vector(6 downto 0) := "1000111";
 
+    -- L-Format
+    constant LOAD: std_logic_vector(6 downto 0) := "0010000";
+    constant STORE: std_logic_vector(6 downto 0) := "0010001";
+    constant LOADIMM: std_logic_vector(6 downto 0) := "0010010";
+    constant MOV : std_logic_vector(6 downto 0) := "0010011";
+
 begin
     -- Only specific components can be flushed
     rst2 <= rst or flush;
@@ -105,15 +112,29 @@ begin
         pc_address_out => pc_address_ifid
     );
 
-    -- Further decoding: 
+    -- Further decoding for rd_index1
     process(opcode) begin
         -- If absolute branching is used, read the value stored in R[ra]
         if (opcode = BR) or (opcode = BR_N) or (opcode = BR_Z) or (opcode = BR_SUB) then
             rd_index1 <= ra;
+            rd_index2 <= rc;
         -- If returning from the subroutine, read the value stored in R7
         elsif (opcode = RETURN_OP) then
             rd_index1 <= "111";
-        -- Otherwise, read from R[rb]
+            rd_index2 <= rc;
+        -- If loading the data from the memory, we retrieve the memory address stored in the register
+        elsif (opcode = LOAD) then
+            rd_index1 <= rb;
+            rd_index2 <= r_src;     -- r_data2 is used as a memory address
+        -- If storing the r_src data to the memory,
+        elsif (opcode = STORE) then
+            rd_index1 <= r_src;     -- Straight through the ALU
+            rd_index2 <= r_dest;
+        -- If moving data from one register to another
+        elsif (opcode = MOV) then
+            rd_index1 <= r_src;     -- Straight through the ALU
+            rd_index2 <= rc;
+        -- Otherwise
         else
             rd_index1 <= rb;
         end if;
@@ -124,7 +145,7 @@ begin
         clk => clk,
         rst => rst,
         rd_index1 => rd_index1,
-        rd_index2 => rc,
+        rd_index2 => rd_index2,
         rd_data1 => rd_data1_idex,
         rd_data2 => rd_data2_idex,
         

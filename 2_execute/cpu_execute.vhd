@@ -66,7 +66,7 @@ architecture Behavioral of CPUExecute is
 
 
 begin
-    mem_addr <= rd_data2(8 downto 0);
+    mem_addr <= rd_data2(15 downto 7);
 
     -- Port mappings
     CPU2: entity work.CPUDecode

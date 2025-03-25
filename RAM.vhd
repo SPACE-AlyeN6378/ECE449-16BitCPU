@@ -8,9 +8,9 @@ use ieee.std_logic_unsigned.all;
 entity DPDISTRAM is
     port( -- a -> r/w     b -> r/o
         dina : in std_logic_vector(15 downto 0);
-        addra : in std_logic_vector(8 downto 0);
-        addrb : in std_logic_vector(8 downto 0);
-        wea : in std_logic_vector(0 downto 0);
+        addra : in std_logic_vector(8 downto 0);    -- Address of the input data
+        addrb : in std_logic_vector(8 downto 0);    -- Address of the instruction
+        wea : in std_logic_vector(0 downto 0);      -- mem_opr
         
         clka: in STD_LOGIC;
         rsta: in STD_LOGIC;
@@ -18,8 +18,8 @@ entity DPDISTRAM is
         ena: in STD_LOGIC;
         enb: in STD_LOGIC;
         
-        douta : out std_logic_vector(15 downto 0);
-        doutb : out std_logic_vector(15 downto 0) 
+        douta : out std_logic_vector(15 downto 0);  -- Output data
+        doutb : out std_logic_vector(15 downto 0)   -- Output instruction
     );
 end DPDISTRAM;
 

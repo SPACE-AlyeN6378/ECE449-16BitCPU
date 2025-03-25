@@ -18,7 +18,10 @@ port(
 
     -- Other incoming signals from the IF/ID pipeline
     ra_in: in std_logic_vector(2 downto 0);
-    ra_out: out std_logic_vector(2 downto 0);
+    ra_out: out std_logic_vector(2 downto 0);      -- This ra_out is the destination register to be written back
+
+    r_dest_in: in std_logic_vector(2 downto 0);
+    r_src_in: in std_logic_vector(2 downto 0);
 
     shift_count_in : in std_logic_vector(3 downto 0);
     shift_count_out : out std_logic_vector(3 downto 0);
@@ -86,7 +89,9 @@ begin
             
             -- Address A assignment (register address will always be 7 if return)
             if (opcode = BR_SUB or opcode = LOADIMM) then
-                ra_out <= "111";
+                ra_out <= "111";    -- Again, ra_out is the write-back register
+            elsif (opcode = LOAD or opcode = MOV) then
+                ra_out <= r_dest_in;
             else
                 ra_out <= ra_in;
             end if;
@@ -272,9 +277,9 @@ begin
                         disp <= (others => '0');
             
                     when LOAD =>
-                        alu_mode <= "111";
+                        alu_mode <= "000";
                         br_mode <= "000";
-                        mem_opr <= "1";
+                        mem_opr <= "0";
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
