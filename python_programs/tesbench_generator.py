@@ -24,12 +24,29 @@ end {entity}_tb;
 architecture testbench of {entity}_tb is
 {vhdl_signals}
 
+    -- Clock period
+    constant clk_period : time := 10 ns;
+
 begin
 
     UUT: entity work.{entity}
     port map (
 {port_mappings}
     );
+
+    -- Clock process
+    clk_process: process
+    begin
+    	while now < 600 ns loop
+          
+            clk <= '0';
+            wait for clk_period / 2;
+            clk <= '1';
+            wait for clk_period / 2;
+          
+       	end loop;
+        wait;
+    end process;
 
     -- Test process
     stim_proc: process
@@ -41,7 +58,7 @@ begin
 end testbench;
 """
 
-filename = "2_execute/cpu_execute.vhd"
+filename = "2_execute/execute.vhd"
 tb_filename = filename.replace('.', '_tb.')
 
 with open(filename, "r") as vhdl_file:

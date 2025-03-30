@@ -15,6 +15,8 @@ port(
     wb_opr_out: out std_logic;
     br_active_out: out std_logic;
     br_mode_out : out std_logic_vector(2 downto 0);
+    -- TODO: Add input_mode and output_mode pin for opcodes IN and OUT
+    -- TODO: Add mem_read_out for opcodes LOAD
 
     -- Other incoming signals from the IF/ID pipeline
     ra_in: in std_logic_vector(2 downto 0);
@@ -95,9 +97,12 @@ begin
             else
                 ra_out <= ra_in;
             end if;
-
+            
+            if rising_edge(clk) then
+                pc_address_out <= pc_address_in;
+            end if;
+            
             shift_count_out <= shift_count_in;
-            pc_address_out <= pc_address_in;
             alu_mode_out <= alu_mode;
             mem_opr_out <= mem_opr;
             wb_opr_out <= wb_opr;
@@ -261,7 +266,7 @@ begin
                         disp <= "000" & disp_s_in;
                     
                     when BR_SUB =>
-                        alu_mode <= "000";
+                        alu_mode <= "001";
                         br_mode <= "110";
                         mem_opr <= "0";
                         wb_opr <= '1';
@@ -269,7 +274,7 @@ begin
                         disp <= "000" & disp_s_in;
                          
                     when RETURN_OP =>
-                        alu_mode <= "001";
+                        alu_mode <= "000";
                         br_mode <= "111";
                         mem_opr <= "0";
                         wb_opr <= '0';
@@ -277,7 +282,7 @@ begin
                         disp <= (others => '0');
             
                     when LOAD =>
-                        alu_mode <= "000";
+                        alu_mode <= "111";
                         br_mode <= "000";
                         mem_opr <= "0";
                         wb_opr <= '1';

@@ -52,25 +52,26 @@ begin
     
       -- INitialize the first branch
       
-      br_address_in <= std_logic_vector(to_signed(0, 9));
-      wait for clk_period;
-      
   	  -- After iterating through 5 lines, set branch active
       wait for 22*clk_period;
       
+      br_address_in <= std_logic_vector(to_signed(16, 9));
       br_active <= '1';
       wait for clk_period;
       br_active <= '0';
       
-      wait for 10*clk_period;
-      br_address_in <= std_logic_vector(to_signed(12, 9));
-      br_active <= '1';
-      wait for clk_period;
-      br_active <= '0';
+    
+        wait for 10*clk_period;
+
+    --   wait for 10*clk_period;
+    --   br_address_in <= std_logic_vector(to_signed(12, 9));
+    --   br_active <= '1';
+    --   wait for clk_period;
+    --   br_active <= '0';
       
-      en <= '0';
-      wait for 30 ns;
-      en <= '1';
+    --   en <= '0';
+    --   wait for 30 ns;
+    --   en <= '1';
       
       wait;
       

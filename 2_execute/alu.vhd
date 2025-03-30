@@ -74,7 +74,7 @@ begin
                 end if;
                 
             when "011" =>  -- MUL
-                temp_result <= std_logic_vector(resize(in1_signed, 32) * resize(in2_signed, 32));
+                temp_result <= std_logic_vector(signed(in1_signed) * signed(in2_signed));
                 -- Check for overflow in MUL
                 -- Overflow detection: If shifting caused a sign change or loss of significant bits
                 if (in1(15) = '0' and temp_result(31 downto 16) /= X"0000") or

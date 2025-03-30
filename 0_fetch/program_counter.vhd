@@ -21,7 +21,7 @@ end ProgramCounter;
 architecture behavioural of ProgramCounter is
 	
 -- PC Signal
-signal address: std_logic_vector(8 downto 0) := (others => '1');
+signal address: std_logic_vector(8 downto 0) := "111111110";
 signal prev_br_address: std_logic_vector(8 downto 0);
 
 begin
@@ -29,17 +29,13 @@ begin
     -- Rising edge
     if (rst = '1') then
        	address <= (others => '0');
-        prev_br_address <= (others => '0');
         
     elsif (clk = '0' and clk'event) then
         if (en = '1') then
               -- New Branch address has been detected
-              if (br_address_in /= prev_br_address) then
-                  prev_br_address <= br_address_in;
-                  address <= br_address_in;
-              elsif (branch_active = '1') then
+              if (branch_active = '1') then
                   -- Maintain loop behavior when branch input is reset
-                  address <= prev_br_address;
+                  address <= br_address_in;
               else
                   -- Normal incrementing behavior
                   address <= std_logic_vector(unsigned(address) + 2);

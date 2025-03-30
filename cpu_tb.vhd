@@ -4,10 +4,10 @@ use ieee.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 
-entity stage2_tb is 
-end stage2_tb;
+entity CPU_tb is 
+end CPU_tb;
 
-architecture behavioural of stage2_tb is
+architecture behavioural of CPU_tb is
 
 	signal clk : std_logic := '0';
     signal rst : std_logic := '0';
@@ -41,7 +41,7 @@ architecture behavioural of stage2_tb is
 begin
 
 	-- Instantiate the pipeline register directly using instantiation
-    UUT: entity work.CPUDecode
+    UUT: entity work.CPU
     port map (
     	clk, rst, flush, en, br_address_in, branch_active, wr_en, wr_reg_index,
       wr_data, rd_data1_out, rd_data2_out, alu_mode_out, br_mode_out, mem_opr_out, 
@@ -68,37 +68,33 @@ begin
     begin
     
       -- INitialize the first branch
-      br_address_in <= std_logic_vector(to_signed(0, 9));
+      br_address_in <= std_logic_vector(to_signed(12, 9));
 
       wr_en <= '1';
-      wr_reg_index <= std_logic_vector(to_unsigned(1, 3));
+      
       wr_data <= std_logic_vector(to_unsigned(4, 16));
+      wr_reg_index <= std_logic_vector(to_unsigned(1, 3));
       wait for clk_period;
-
-      wr_reg_index <= std_logic_vector(to_unsigned(2, 3));
+      
       wr_data <= std_logic_vector(to_unsigned(6, 16));
+      wr_reg_index <= std_logic_vector(to_unsigned(2, 3));
       wait for clk_period;
-
-      wr_reg_index <= std_logic_vector(to_unsigned(0, 3));
+      
       wr_data <= std_logic_vector(to_unsigned(15, 16));
+      wr_reg_index <= std_logic_vector(to_unsigned(0, 3));
       wait for clk_period;
-
-      wr_reg_index <= std_logic_vector(to_unsigned(4, 3));
-      wr_data <= std_logic_vector(to_unsigned(9, 16));
+      
+      
+      wr_data <= std_logic_vector(to_unsigned(0, 16));
+      wr_reg_index <= std_logic_vector(to_unsigned(3, 3));
       wait for clk_period;
-
+      
       -- wr_reg_index <= std_logic_vector(to_unsigned(2, 3));
       -- wr_data <= std_logic_vector(to_unsigned(6, 16));
       -- wait until falling_edge(clk);
-
+      wr_reg_index <= std_logic_vector(to_unsigned(0, 3));
       wr_en <= '0';
       wait for 22*clk_period;
-
-      flush <= '1';
-      wait for clk_period;
-      flush <= '0';
-
-      wait for 12*clk_period;
 
       wait;
       
