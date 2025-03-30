@@ -8,6 +8,7 @@ entity CPUFetch is
     port(
         clk : in std_logic;
         rst : in std_logic;
+        pipeline_rst: in std_logic;
         
         -- Input signals
         br_address_in: in std_logic_vector(8 downto 0);
@@ -62,7 +63,7 @@ begin
     );
 
     pipeline: entity work.ifid_pipeline_register port map (
-            clk => clk, rst => rst, enable => en, 
+            clk => clk, rst => pipeline_rst, enable => en, 
             instr_in => instr_data, opcode => opcode, 
             -- reg_wr_en => reg_wr_en, 
             ra => ra, rb => rb, rc => rc, c1 => c1, 

@@ -120,11 +120,10 @@ begin
     -- Port mappings
     FETCH_STAGE: entity work.CPUFetch
     port map (
-        clk => clk, rst => rst,
-
-        br_address_in => br_address_in,
+        clk => clk, rst => flush, pipeline_rst => flush,
+        br_address_in => br_address_to_pc,
         en => en,
-        branch_active => branch_active,
+        branch_active => br_enable_to_pc,
 
         opcode => opcode,
         ra => ra, rb => rb, rc => rc, c1 => c1,
@@ -158,7 +157,7 @@ begin
     port map (
         rst_ex => rst, 
         clk => clk, 
-        rst_ld => rst,
+        rst_ld => flush,
         OPCODE => opcode,
         alu_mode_out => alu_mode_idex,
         br_mode_out => br_mode_idex,
@@ -194,7 +193,7 @@ begin
     -- IN - idex, OUT - output ports
     port map (
         clk => clk,		-- System clock
-        rst => rst,		-- Reset pin
+        rst => flush,		-- Reset pin
         enable => en,	-- Enable pin
         rd_data1 => rd_data1_idex,		-- Register data 1
         rd_data2 => rd_data2_idex,  	-- Register data 2
