@@ -9,7 +9,6 @@ entity CPU is
         -- Input ports
         clk: in std_logic;
         rst: in std_logic;
-        flush: in std_logic;    -- For clearing out the instructions after branching
         en: in std_logic;
 
         -- Branching controller ports
@@ -19,29 +18,32 @@ entity CPU is
         -- Write signals
         wr_en: in std_logic;
         wr_reg_index: in std_logic_vector(2 downto 0);
-        wr_data: in std_logic_vector(15 downto 0);
+        wr_data: in std_logic_vector(15 downto 0)
 
         -- Outputs
-        rd_data1_out: out std_logic_vector(15 downto 0);
-        rd_data2_out: out std_logic_vector(15 downto 0);
-        alu_mode_out: out std_logic_vector(2 downto 0);
-        br_mode_out: out std_logic_vector(2 downto 0);
-        mem_opr_out: out std_logic_vector(0 downto 0);
-        wb_opr_out: out std_logic;
-        br_active_out: out std_logic;
-        ra_out: out std_logic_vector(2 downto 0);
-        shift_count_out: out std_logic_vector(3 downto 0);
-        pc_address_out: out std_logic_vector(8 downto 0);
-        disp_out: out std_logic_vector(8 downto 0)
+        -- rd_data1_out: out std_logic_vector(15 downto 0);
+        -- rd_data2_out: out std_logic_vector(15 downto 0);
+        -- alu_mode_out: out std_logic_vector(2 downto 0);
+        -- br_mode_out: out std_logic_vector(2 downto 0);
+        -- mem_opr_out: out std_logic_vector(0 downto 0);
+        -- wb_opr_out: out std_logic;
+        -- br_active_out: out std_logic;
+        -- ra_out: out std_logic_vector(2 downto 0);
+        -- shift_count_out: out std_logic_vector(3 downto 0);
+        -- pc_address_out: out std_logic_vector(8 downto 0);
+        -- disp_out: out std_logic_vector(8 downto 0)
     );
 
 end CPU;
 
 architecture Behavioral of CPU is
     -- 
-    signal rst2 : std_logic;    -- rst OR flush
+    signal flush : std_logic;    -- For clearing out the instructions after branching
     signal addr  : std_logic_vector(8 downto 0);    -- address
 
+    -- =====================================
+    --       SIGNALS IN DECODING STAGE
+    -- =====================================
     -- From IF/ID Pipeline
     signal opcode: std_logic_vector(6 downto 0) := (others => '0'); -- Opcode
 
@@ -79,18 +81,46 @@ architecture Behavioral of CPU is
     signal pc_address_idex: std_logic_vector(8 downto 0);
     signal disp_idex: std_logic_vector(8 downto 0); -- Direct disp values
 
-    -- TODO: Add more signals between the execution stage
+    -- =====================================
+    --      SIGNALS IN EXECUTION STAGE
+    -- =====================================
+    -- From ID/EX Pipeline
+    signal rd_data1_exec: std_logic_vector(15 downto 0);
+    signal rd_data2_exec: std_logic_vector(15 downto 0);
+    signal alu_mode_exec: std_logic_vector(2 downto 0);
+    signal br_mode_exec: std_logic_vector(2 downto 0);
+    signal mem_opr_exec: std_logic_vector(0 downto 0);
+    signal wb_opr_exec: std_logic;
+    signal br_active_exec: std_logic;
+    signal ra_exec: std_logic_vector(2 downto 0);
+    signal shift_count_exec: std_logic_vector(3 downto 0);
+    signal pc_address_exec: std_logic_vector(8 downto 0);
+    signal disp_exec: std_logic_vector(8 downto 0);
+
+    ----------------------------------------------------------------------------------
+    -- To the program counter
+    signal br_address_to_pc: std_logic_vector(8 downto 0);        -- Goes back to PC at stage 1 - Fetch
+    signal br_enable_to_pc: std_logic;                      -- Goes back to PC stage 1 (at flush and br_active pins)
+
+    -- =====================================
+    --       SIGNALS IN MEMORY STAGE
+    -- =====================================
+    signal alu_result_mem: std_logic_vector(15 downto 0);
+    signal mem_addr_mem: std_logic_vector(8 downto 0);
+    signal mem_opr_mem: std_logic_vector(0 downto 0);
+    signal wb_opr_mem: std_logic;
+    signal ra_mem: std_logic_vector(2 downto 0);
     
 
 begin
     -- Only specific components can be flushed
-    rst2 <= rst or flush;
+    flush <= rst or br_enable_to_pc;
     -- TODO: Use XOR gate for register indices to stall pipeline
 
     -- Port mappings
     FETCH_STAGE: entity work.CPUFetch
     port map (
-        clk => clk, rst => rst2,
+        clk => clk, rst => rst,
 
         br_address_in => br_address_in,
         en => en,
@@ -126,7 +156,7 @@ begin
 
     DECODER: entity work.decoder
     port map (
-        rst_ex => rst2, 
+        rst_ex => rst, 
         clk => clk, 
         rst_ld => rst,
         OPCODE => opcode,
@@ -164,7 +194,7 @@ begin
     -- IN - idex, OUT - output ports
     port map (
         clk => clk,		-- System clock
-        rst => rst2,		-- Reset pin
+        rst => rst,		-- Reset pin
         enable => en,	-- Enable pin
         rd_data1 => rd_data1_idex,		-- Register data 1
         rd_data2 => rd_data2_idex,  	-- Register data 2
@@ -173,30 +203,56 @@ begin
         mem_opr_in => mem_opr_idex,	    -- Memory operand
         wb_opr_in => wb_opr_idex,		-- WB Operand
        
-    	dr1_out => rd_data1_out,	-- Register data 1
-        dr2_out => rd_data2_out, 	-- Register data 2
+    	dr1_out => rd_data1_exec,	-- Register data 1
+        dr2_out => rd_data2_exec, 	-- Register data 2
 
-        alu_mode_out => alu_mode_out,
-        br_mode_out => br_mode_out,
-        mem_opr_out => mem_opr_out,
-        wb_opr_out => wb_opr_out,
+        alu_mode_out => alu_mode_exec,
+        br_mode_out => br_mode_exec,
+        mem_opr_out => mem_opr_exec,
+        wb_opr_out => wb_opr_exec,
         
         ra_in => ra_idex,
-        ra_out => ra_out,
+        ra_out => ra_exec,
 
         shift_count_in => shift_count_idex,
-        shift_count_out => shift_count_out,
+        shift_count_out => shift_count_exec,
 
         pc_address_in => pc_address_idex,
-        pc_address_out => pc_address_out,
+        pc_address_out => pc_address_exec,
 
         br_active_in => br_active_idex,
-        br_active_out => br_active_out,
+        br_active_out => br_active_exec,
 
         disp_in => disp_idex,
-        disp_out => disp_out
+        disp_out => disp_exec
     );
 
     -- TODO: Attach the execution stage here
+    EXECUTE_STAGE: entity work.ExecutionStage
+    port map (
+        clk => clk, rst => rst, en => en,
+        rd_data1 => rd_data1_exec,
+        rd_data2 => rd_data2_exec,
+        alu_mode => alu_mode_exec,
+        shift_count => shift_count_exec,
+
+        mem_opr => mem_opr_exec,
+        wb_opr => wb_opr_exec, 
+        ra => ra_exec,
+
+        br_mode => br_mode_exec, disp => disp_exec,          -- Goes to Branch control unit
+        br_enable => br_active_exec, 
+        pc_address => pc_address_exec,
+
+        br_address_to_pc => br_address_to_pc,
+        br_enable_to_pc => br_enable_to_pc,
+
+        alu_result_out => alu_result_mem,
+        mem_addr_out => mem_addr_mem,
+        mem_opr_out => mem_opr_mem,
+        wb_opr_out => wb_opr_mem,
+        ra_out => ra_mem
+    );
+
 
 end Behavioral;

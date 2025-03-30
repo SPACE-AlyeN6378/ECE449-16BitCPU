@@ -9,9 +9,8 @@ end CPU_tb;
 
 architecture behavioural of CPU_tb is
 
-	signal clk : std_logic := '0';
+	  signal clk : std_logic := '0';
     signal rst : std_logic := '0';
-    signal flush : std_logic := '0';
     signal en : std_logic := '1';
 
     signal branch_active : std_logic := '0';
@@ -22,19 +21,6 @@ architecture behavioural of CPU_tb is
     signal wr_reg_index: std_logic_vector(2 downto 0);
     signal wr_data: std_logic_vector(15 downto 0);
 
-    -- Outputs
-    signal rd_data1_out: std_logic_vector(15 downto 0);
-    signal rd_data2_out: std_logic_vector(15 downto 0);
-    signal alu_mode_out: std_logic_vector(2 downto 0);
-    signal br_mode_out: std_logic_vector(2 downto 0);
-    signal mem_opr_out: std_logic_vector(0 downto 0);
-    signal wb_opr_out: std_logic;
-    signal br_active_out: std_logic;
-
-    signal ra_out: std_logic_vector(2 downto 0);
-    signal shift_count_out: std_logic_vector(3 downto 0);
-    signal pc_address_out: std_logic_vector(8 downto 0);
-
     -- Clock period
     constant clk_period : time := 10 ns;
     
@@ -43,9 +29,7 @@ begin
 	-- Instantiate the pipeline register directly using instantiation
     UUT: entity work.CPU
     port map (
-    	clk, rst, flush, en, br_address_in, branch_active, wr_en, wr_reg_index,
-      wr_data, rd_data1_out, rd_data2_out, alu_mode_out, br_mode_out, mem_opr_out, 
-      wb_opr_out, br_active_out, ra_out, shift_count_out, pc_address_out
+    	clk, rst, en, br_address_in, branch_active, wr_en, wr_reg_index, wr_data
     );
     
     -- Clock process

@@ -1,6 +1,7 @@
 @echo off
 @REM ANALYZE
 call 1_decode\decode_analyze.bat
+call 2_execute\execute_analyze.bat
 ghdl -a CPU.vhd
 
 @REM TESTBENCH

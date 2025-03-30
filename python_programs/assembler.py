@@ -108,7 +108,8 @@ code_block = """
     IN    r2
     ADD   r1, r0, r2
     MUL   r2, r0, r1
-    BR.Z  r3+4
+    BR.Z  r3+5
+    SUB   r3, r2, r0
     NOP
 """
 AssemblyCode.assemble(code_block)

@@ -28,9 +28,9 @@ architecture behavioral of instruction_cache is
         5 => X"4280",
         6 => X"0242",
         7 => X"0681",
-        8 => X"8AC4",
-        9 => X"0000",
-
+        8 => X"8AC5",
+        9 => X"04D0",
+        10 => X"0000",
 
         -- Fill the rest with NOPs
         others => X"0000"  -- NOP
