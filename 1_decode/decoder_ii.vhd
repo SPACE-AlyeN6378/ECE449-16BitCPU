@@ -34,7 +34,7 @@ architecture Behavioral of DecoderII is
     constant MOV : std_logic_vector(6 downto 0) := "0010011";
     -- **********************************************
 begin
-    process(opcode) begin
+    process(opcode, ra, rb, rc, r_src, r_dest) begin
 
         -- If absolute branching is used, read the value stored in R[ra]
         if (opcode = BR) or (opcode = BR_N) or (opcode = BR_Z) or (opcode = BR_SUB) then

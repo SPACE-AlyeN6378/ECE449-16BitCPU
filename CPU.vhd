@@ -72,6 +72,7 @@ architecture Behavioral of CPU is
     signal alu_mode_idex: std_logic_vector(2 downto 0);
     signal br_mode_idex: std_logic_vector(2 downto 0);
     signal mem_opr_idex: std_logic_vector(0 downto 0);
+    signal mem_read_idex: std_logic;
     signal wb_opr_idex: std_logic;
     signal br_active_idex: std_logic;
     signal shift_count_idex: std_logic_vector(3 downto 0);
@@ -89,6 +90,7 @@ architecture Behavioral of CPU is
     signal alu_mode_exec: std_logic_vector(2 downto 0);
     signal br_mode_exec: std_logic_vector(2 downto 0);
     signal mem_opr_exec: std_logic_vector(0 downto 0);
+    signal mem_read_exec: std_logic;
     signal wb_opr_exec: std_logic;
     signal br_active_exec: std_logic;
     signal ra_exec: std_logic_vector(2 downto 0);
@@ -109,6 +111,7 @@ architecture Behavioral of CPU is
     signal alu_result_mem: std_logic_vector(15 downto 0);
     signal mem_addr_mem: std_logic_vector(8 downto 0);
     signal mem_opr_mem: std_logic_vector(0 downto 0);
+    signal mem_read_mem: std_logic;
     signal wb_opr_mem: std_logic;
     signal ra_mem: std_logic_vector(2 downto 0);
     
@@ -177,6 +180,7 @@ begin
         alu_mode_out => alu_mode_idex,
         br_mode_out => br_mode_idex,
         mem_opr_out => mem_opr_idex,
+        mem_read_out => mem_read_idex,
         wb_opr_out => wb_opr_idex,
         br_active_out => br_active_idex,
 
@@ -215,6 +219,7 @@ begin
         alu_mode_in => alu_mode_idex,	-- ALU Mode
         br_mode_in => br_mode_idex,
         mem_opr_in => mem_opr_idex,	    -- Memory operand
+        mem_read_in => mem_read_idex,   -- Read memory, otherwise ALU
         wb_opr_in => wb_opr_idex,		-- WB Operand
        
     	dr1_out => rd_data1_exec,	-- Register data 1
@@ -223,6 +228,7 @@ begin
         alu_mode_out => alu_mode_exec,
         br_mode_out => br_mode_exec,
         mem_opr_out => mem_opr_exec,
+        mem_read_out => mem_read_exec,
         wb_opr_out => wb_opr_exec,
         
         ra_in => ra_idex,
@@ -241,7 +247,6 @@ begin
         disp_out => disp_exec
     );
 
-    -- TODO: Attach the execution stage here
     EXECUTE_STAGE: entity work.ExecutionStage
     port map (
         clk => clk, rst => rst, en => en,
@@ -251,6 +256,7 @@ begin
         shift_count => shift_count_exec,
 
         mem_opr => mem_opr_exec,
+        mem_read => mem_read_exec,
         wb_opr => wb_opr_exec, 
         ra => ra_exec,
 
@@ -264,6 +270,7 @@ begin
         alu_result_out => alu_result_mem,
         mem_addr_out => mem_addr_mem,
         mem_opr_out => mem_opr_mem,
+        mem_read_out => mem_read_mem,
         wb_opr_out => wb_opr_mem,
         ra_out => ra_mem
     );

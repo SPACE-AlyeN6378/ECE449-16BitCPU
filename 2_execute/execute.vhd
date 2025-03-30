@@ -18,6 +18,7 @@ entity ExecutionStage is
         shift_count: in std_logic_vector(3 downto 0);   -- Goes to ALU
 
         mem_opr: in std_logic_vector(0 downto 0);       -- Goes straight to pipeline
+        mem_read: in std_logic;
         wb_opr: in std_logic;                           -- Goes straight to pipeline
         ra: in std_logic_vector(2 downto 0);            -- Goes straight to pipeline
 
@@ -33,6 +34,7 @@ entity ExecutionStage is
         alu_result_out: out std_logic_vector(15 downto 0);
         mem_addr_out: out std_logic_vector(8 downto 0);
         mem_opr_out: out std_logic_vector(0 downto 0);
+        mem_read_out: out std_logic;
         wb_opr_out: out std_logic;
         ra_out: out std_logic_vector(2 downto 0)
 
@@ -102,14 +104,18 @@ begin
         clk => clk,
         rst => rst,
         enable => en,
+        
         alu_result_in => alu_result,
         mem_addr_in => mem_addr,
         mem_opr_in => mem_opr,
+        mem_read_in => mem_read,
         wb_opr_in => wb_opr,
         ra_in => ra,
+
         alu_result_out => alu_result_out,
         mem_addr_out => mem_addr_out,
         mem_opr_out => mem_opr_out,
+        mem_read_out => mem_read_out,
         wb_opr_out => wb_opr_out,
         ra_out => ra_out
     );

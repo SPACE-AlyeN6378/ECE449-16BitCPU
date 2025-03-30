@@ -12,11 +12,12 @@ port(
 
     alu_mode_out: out std_logic_vector(2 downto 0);
     mem_opr_out: out std_logic_vector(0 downto 0);
+    mem_read_out : out std_logic;
     wb_opr_out: out std_logic;
     br_active_out: out std_logic;
     br_mode_out : out std_logic_vector(2 downto 0);
     -- TODO: Add input_mode and output_mode pin for opcodes IN and OUT
-    -- TODO: Add mem_read_out for opcodes LOAD
+    
 
     -- Other incoming signals from the IF/ID pipeline
     ra_in: in std_logic_vector(2 downto 0);
@@ -43,6 +44,7 @@ architecture behavioural of decoder is
     
     signal alu_mode : std_logic_vector(2 downto 0);
     signal mem_opr : std_logic_vector(0 downto 0);
+    signal mem_read : std_logic;    -- To decide between ALU result and the memory data
     signal wb_opr : std_logic; -- wb enable and reg enable
     signal br_active : std_logic;   -- activate branch
     signal disp : std_logic_vector(8 downto 0);
@@ -91,7 +93,7 @@ begin
             
             -- Address A assignment (register address will always be 7 if return)
             if (opcode = BR_SUB or opcode = LOADIMM) then
-                ra_out <= "111";    -- Again, ra_out is the write-back register
+                ra_out <= "111";    -- Again, ra_out is the write-back register, being written back to R7
             elsif (opcode = LOAD or opcode = MOV) then
                 ra_out <= r_dest_in;
             else
@@ -105,6 +107,7 @@ begin
             shift_count_out <= shift_count_in;
             alu_mode_out <= alu_mode;
             mem_opr_out <= mem_opr;
+            mem_read_out <= mem_read;    -- TODO: Uncomment this when output 
             wb_opr_out <= wb_opr;
             br_active_out <= br_active;
             disp_out <= disp;
@@ -118,6 +121,7 @@ begin
         alu_mode <= "000";
         br_mode <= "000";
         mem_opr <= "0";
+        mem_read <= '0';
         wb_opr <= '0';
         br_active <= '0';
         disp <= (others => '0');
@@ -129,6 +133,7 @@ begin
                 alu_mode <= "000";
                 br_mode <= "000";
                 mem_opr <= "0";
+                mem_read <= '0';
                 wb_opr <= '0';
                 br_active <= '0';
                 disp <= (others => '0');
@@ -138,17 +143,20 @@ begin
                 alu_mode <= "000";
                 br_mode <= "000";
                 mem_opr <= "0";
+                mem_read <= '0';
                 wb_opr <= '0';
                 br_active <= '0';
                 disp <= (others => '0');
                 next_state <= DECODE;
 
             when DECODE =>
+
                 case OPCODE is
                     when NOP =>
                         alu_mode <= "000";
                         br_mode <= "000";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '0';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -158,6 +166,7 @@ begin
                         alu_mode <= "001";
                         br_mode <= "000";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -167,6 +176,7 @@ begin
                         alu_mode <= "010";
                         br_mode <= "000";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -176,6 +186,7 @@ begin
                         alu_mode <= "011";
                         br_mode <= "000";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -185,6 +196,7 @@ begin
                         alu_mode <= "100";
                         br_mode <= "000";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -194,6 +206,7 @@ begin
                         alu_mode <= "101";
                         br_mode <= "000";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -203,6 +216,7 @@ begin
                         alu_mode <= "110";
                         br_mode <= "000";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -212,6 +226,7 @@ begin
                         alu_mode <= "111";
                         br_mode <= "000";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '0';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -221,6 +236,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "000";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '0';
                         br_active <= '1';
                         disp <= disp_l_in;
@@ -229,6 +245,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "001";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '0';
                         br_active <= '1';
                         disp <= disp_l_in;
@@ -237,6 +254,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "010";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '0';
                         br_active <= '1';
                         disp <= disp_l_in;
@@ -245,6 +263,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "011";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '0';
                         br_active <= '1';
                         disp <= "000" & disp_s_in;
@@ -253,6 +272,7 @@ begin
                         alu_mode <= "111";
                         br_mode <= "100";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '0';
                         br_active <= '1';
                         disp <= "000" & disp_s_in;
@@ -261,6 +281,7 @@ begin
                         alu_mode <= "111";
                         br_mode <= "101";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '0';
                         br_active <= '1';
                         disp <= "000" & disp_s_in;
@@ -269,6 +290,7 @@ begin
                         alu_mode <= "001";
                         br_mode <= "110";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '1';
                         br_active <= '1';
                         disp <= "000" & disp_s_in;
@@ -277,6 +299,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "111";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '0';
                         br_active <= '1';
                         disp <= (others => '0');
@@ -285,6 +308,7 @@ begin
                         alu_mode <= "111";
                         br_mode <= "000";
                         mem_opr <= "0";
+                        mem_read <= '1';
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -293,6 +317,7 @@ begin
                         alu_mode <= "111";
                         br_mode <= "000";
                         mem_opr <= "1";
+                        mem_read <= '0';
                         wb_opr <= '0';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -301,6 +326,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "000";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -309,6 +335,7 @@ begin
                         alu_mode <= "111";
                         br_mode <= "000";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -317,6 +344,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "000";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -325,6 +353,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "000";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '0'; -- temp
                         br_active <= '0';
                         disp <= (others => '0');
@@ -333,6 +362,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "000";
                         mem_opr <= "0";
+                        mem_read <= '0';
                         wb_opr <= '0';
                         br_active <= '0';
                         disp <= (others => '0');

@@ -47,28 +47,28 @@ begin
             --read operation (synchronous)
          case rd_index1(2 downto 0) is
          
-         when "000" => rd_data1 <= reg_file(0);
-         when "001" => rd_data1 <= reg_file(1);
-         when "010" => rd_data1 <= reg_file(2);
-         when "011" => rd_data1 <= reg_file(3);
-         when "100" => rd_data1 <= reg_file(4);
-         when "101" => rd_data1 <= reg_file(5);
-         when "110" => rd_data1 <= reg_file(6);      
-         --fill this part filled!
-         when others => rd_data1 <= reg_file(7); 
+            when "000" => rd_data1 <= reg_file(0);
+            when "001" => rd_data1 <= reg_file(1);
+            when "010" => rd_data1 <= reg_file(2);
+            when "011" => rd_data1 <= reg_file(3);
+            when "100" => rd_data1 <= reg_file(4);
+            when "101" => rd_data1 <= reg_file(5);
+            when "110" => rd_data1 <= reg_file(6);      
+            --fill this part filled!
+            when others => rd_data1 <= reg_file(7); 
          end case;
 
          case rd_index2(2 downto 0) is
          
-         when "000" => rd_data2 <= reg_file(0);
-         when "001" => rd_data2 <= reg_file(1);
-         when "010" => rd_data2 <= reg_file(2);
-         when "011" => rd_data2 <= reg_file(3);
-         when "100" => rd_data2 <= reg_file(4);
-         when "101" => rd_data2 <= reg_file(5);
-         when "110" => rd_data2 <= reg_file(6);      
-         --fill this part filled!
-         when others => rd_data2 <= reg_file(7); 
+            when "000" => rd_data2 <= reg_file(0);
+            when "001" => rd_data2 <= reg_file(1);
+            when "010" => rd_data2 <= reg_file(2);
+            when "011" => rd_data2 <= reg_file(3);
+            when "100" => rd_data2 <= reg_file(4);
+            when "101" => rd_data2 <= reg_file(5);
+            when "110" => rd_data2 <= reg_file(6);      
+            --fill this part filled!
+            when others => rd_data2 <= reg_file(7); 
          end case;
          
             
