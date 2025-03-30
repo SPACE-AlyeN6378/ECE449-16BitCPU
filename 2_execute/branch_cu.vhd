@@ -54,6 +54,7 @@ begin
         absolute_val <= unsigned(r_data_signed + disp_signed + disp_signed);
         
         -- Send the results, according to br_mode
+        if (enable = '1') then
         case br_mode is
             when "000" =>   -- BRR
                 br_active_sig <= enable;
@@ -91,6 +92,7 @@ begin
                 result <= std_logic_vector(pc_signed + 2);
 
         end case;
+        end if;
     end process;
 
     

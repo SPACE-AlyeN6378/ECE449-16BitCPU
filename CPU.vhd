@@ -37,8 +37,7 @@ entity CPU is
 end CPU;
 
 architecture Behavioral of CPU is
-    -- 
-    signal flush : std_logic;    -- For clearing out the instructions after branching
+
     signal addr  : std_logic_vector(8 downto 0);    -- address
 
     -- =====================================
@@ -101,7 +100,9 @@ architecture Behavioral of CPU is
     -- To the program counter
     signal br_address_to_pc: std_logic_vector(8 downto 0);        -- Goes back to PC at stage 1 - Fetch
     signal br_enable_to_pc: std_logic;                      -- Goes back to PC stage 1 (at flush and br_active pins)
-
+    signal flush : std_logic;    -- For clearing out the instructions after branching
+    signal flush_jr : std_logic := '0';
+    
     -- =====================================
     --       SIGNALS IN MEMORY STAGE
     -- =====================================
@@ -113,14 +114,28 @@ architecture Behavioral of CPU is
     
 
 begin
-    -- Only specific components can be flushed
-    flush <= rst or br_enable_to_pc;
+    -- Stalling mechanism
+    flush <= rst or flush_jr;
+    
+    process (br_enable_to_pc, pc_address_idex, br_address_to_pc) begin
+        if rising_edge(br_enable_to_pc) then
+            flush_jr <= '1';    -- Latch the flush_jr to active HIGH
+        end if;
+
+        -- If the pc_address behind the ID/EX matches the address being sent to the PC
+        if (flush_jr = '1' and pc_address_idex = br_address_to_pc) then
+            -- Set the flush_jr to active low
+            flush_jr <= '0';
+        end if;
+
+    end process;
+
     -- TODO: Use XOR gate for register indices to stall pipeline
 
     -- Port mappings
     FETCH_STAGE: entity work.CPUFetch
     port map (
-        clk => clk, rst => flush, pipeline_rst => flush,
+        clk => clk, rst => rst, pipeline_rst => rst,
         br_address_in => br_address_to_pc,
         en => en,
         branch_active => br_enable_to_pc,
@@ -157,7 +172,7 @@ begin
     port map (
         rst_ex => rst, 
         clk => clk, 
-        rst_ld => flush,
+        rst_ld => rst,
         OPCODE => opcode,
         alu_mode_out => alu_mode_idex,
         br_mode_out => br_mode_idex,

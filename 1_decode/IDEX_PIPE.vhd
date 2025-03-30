@@ -47,6 +47,7 @@ architecture behavioural of idex_pipeline is
 begin
 	process(clk, rst)
     begin
+        
     	if rising_edge(clk) then
         	if rst = '1' then
             	dr1_out <= (others => '0');			-- Register data 1
@@ -60,7 +61,6 @@ begin
                 br_active_out <= '0';
                 disp_out <= (others => '0');
 
-                
             elsif enable = '1' then
             	dr1_out <= rd_data1;			-- Register data 1
         		dr2_out <= rd_data2;  			-- Register data 2
