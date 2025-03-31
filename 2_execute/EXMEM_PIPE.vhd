@@ -14,18 +14,17 @@ entity exmem_pipeline is
         alu_result_in: in std_logic_vector(15 downto 0);
         mem_addr_in: in std_logic_vector(8 downto 0);           -- Memory address from register data
         mem_opr_in: in std_logic_vector(0 downto 0);			-- Memory operand
-        mem_read_in: in std_logic;                              -- Memory read mode, otherwise read from ALU
+        data_type_in: in std_logic_vector(1 downto 0);          -- Memory read mode, otherwise read from ALU
         wb_opr_in: in std_logic;								-- WB Operand
         ra_in: in std_logic_vector(2 downto 0);
         
     	--alu_result_out_upper: out std_logic_vector(15 downto 0);		-- ALU Result (Upper half)
-        --ra: out std_logic_vector(2 downto 0);	-- Address of register A
         alu_result_out: out std_logic_vector(15 downto 0);		-- ALU Result (Lower half)
         mem_addr_out: out std_logic_vector(8 downto 0);
         mem_opr_out: out std_logic_vector(0 downto 0);			-- Memory operand
-        mem_read_out: out std_logic;
-        wb_opr_out: out std_logic;
-        ra_out: out std_logic_vector(2 downto 0)									-- WB Operand
+        data_type_out: out std_logic_vector(1 downto 0);
+        wb_opr_out: out std_logic;                              -- WB Operand
+        ra_out: out std_logic_vector(2 downto 0)									
     );
     
 end exmem_pipeline;
@@ -40,7 +39,7 @@ begin
                 alu_result_out <= (others => '0');
                 mem_addr_out <= (others => '0');
         		mem_opr_out <= (others => '0');
-                mem_read_out <= '0';
+                data_type_out <= "00";
         		wb_opr_out <= '0';	
                 ra_out <= (others => '0');
                 
@@ -49,7 +48,7 @@ begin
                 alu_result_out <= alu_result_in;
                 mem_addr_out <= mem_addr_in;
         		mem_opr_out <= mem_opr_in;	
-                mem_read_out <= mem_read_in;		
+                data_type_out <= data_type_in;		
         		wb_opr_out <= wb_opr_in;
                 ra_out <= ra_in;		
                 

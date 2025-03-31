@@ -13,6 +13,8 @@ architecture behavioural of CPU_tb is
     signal rst : std_logic := '0';
     signal en : std_logic := '1';
 
+    signal in_port: std_logic_vector(15 downto 0);
+
     signal branch_active : std_logic := '0';
     signal br_address_in: std_logic_vector(8 downto 0);
     
@@ -29,7 +31,7 @@ begin
 	-- Instantiate the pipeline register directly using instantiation
     UUT: entity work.CPU
     port map (
-    	clk, rst, en, br_address_in, branch_active, wr_en, wr_reg_index, wr_data
+    	clk, rst, en, in_port, wr_en, wr_reg_index, wr_data
     );
     
     -- Clock process

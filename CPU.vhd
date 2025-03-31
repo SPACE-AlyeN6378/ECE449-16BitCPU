@@ -11,11 +11,10 @@ entity CPU is
         rst: in std_logic;
         en: in std_logic;
 
-        -- Branching controller ports
-        br_address_in: in std_logic_vector(8 downto 0);
-        branch_active: in std_logic;
+        in_port: in std_logic_vector(15 downto 0);
 
         -- Write signals
+
         wr_en: in std_logic;
         wr_reg_index: in std_logic_vector(2 downto 0);
         wr_data: in std_logic_vector(15 downto 0)
@@ -72,7 +71,7 @@ architecture Behavioral of CPU is
     signal alu_mode_idex: std_logic_vector(2 downto 0);
     signal br_mode_idex: std_logic_vector(2 downto 0);
     signal mem_opr_idex: std_logic_vector(0 downto 0);
-    signal mem_read_idex: std_logic;
+    signal data_type_idex: std_logic_vector(1 downto 0);
     signal wb_opr_idex: std_logic;
     signal br_active_idex: std_logic;
     signal shift_count_idex: std_logic_vector(3 downto 0);
@@ -90,7 +89,7 @@ architecture Behavioral of CPU is
     signal alu_mode_exec: std_logic_vector(2 downto 0);
     signal br_mode_exec: std_logic_vector(2 downto 0);
     signal mem_opr_exec: std_logic_vector(0 downto 0);
-    signal mem_read_exec: std_logic;
+    signal data_type_exec: std_logic_vector(1 downto 0);
     signal wb_opr_exec: std_logic;
     signal br_active_exec: std_logic;
     signal ra_exec: std_logic_vector(2 downto 0);
@@ -111,10 +110,16 @@ architecture Behavioral of CPU is
     signal alu_result_mem: std_logic_vector(15 downto 0);
     signal mem_addr_mem: std_logic_vector(8 downto 0);
     signal mem_opr_mem: std_logic_vector(0 downto 0);
-    signal mem_read_mem: std_logic;
+    signal data_type_mem: std_logic_vector(1 downto 0);
     signal wb_opr_mem: std_logic;
     signal ra_mem: std_logic_vector(2 downto 0);
-    
+
+    -- =====================================
+    --      SIGNALS IN WRITEBACK STAGE
+    -- =====================================
+    signal data: std_logic_vector(15 downto 0);
+    signal wb_opr_to_reg: std_logic;
+    signal ra_to_reg: std_logic_vector(2 downto 0);
 
 begin
     -- Stalling mechanism
@@ -166,9 +171,9 @@ begin
         rd_data1 => rd_data1_idex,
         rd_data2 => rd_data2_idex,
         
-        wr_index => wr_reg_index,
-        wr_data => wr_data,
-        wr_enable => wr_en
+        wr_index => ra_to_reg,
+        wr_data => data,
+        wr_enable => wb_opr_to_reg
     );
 
     DECODER: entity work.decoder
@@ -180,7 +185,7 @@ begin
         alu_mode_out => alu_mode_idex,
         br_mode_out => br_mode_idex,
         mem_opr_out => mem_opr_idex,
-        mem_read_out => mem_read_idex,
+        data_type_out => data_type_idex,
         wb_opr_out => wb_opr_idex,
         br_active_out => br_active_idex,
 
@@ -219,7 +224,7 @@ begin
         alu_mode_in => alu_mode_idex,	-- ALU Mode
         br_mode_in => br_mode_idex,
         mem_opr_in => mem_opr_idex,	    -- Memory operand
-        mem_read_in => mem_read_idex,   -- Read memory, otherwise ALU
+        data_type_in => data_type_idex,   -- Read memory, otherwise ALU
         wb_opr_in => wb_opr_idex,		-- WB Operand
        
     	dr1_out => rd_data1_exec,	-- Register data 1
@@ -228,7 +233,7 @@ begin
         alu_mode_out => alu_mode_exec,
         br_mode_out => br_mode_exec,
         mem_opr_out => mem_opr_exec,
-        mem_read_out => mem_read_exec,
+        data_type_out => data_type_exec,
         wb_opr_out => wb_opr_exec,
         
         ra_in => ra_idex,
@@ -256,7 +261,7 @@ begin
         shift_count => shift_count_exec,
 
         mem_opr => mem_opr_exec,
-        mem_read => mem_read_exec,
+        data_type => data_type_exec,
         wb_opr => wb_opr_exec, 
         ra => ra_exec,
 
@@ -270,9 +275,25 @@ begin
         alu_result_out => alu_result_mem,
         mem_addr_out => mem_addr_mem,
         mem_opr_out => mem_opr_mem,
-        mem_read_out => mem_read_mem,
+        data_type_out => data_type_mem,
         wb_opr_out => wb_opr_mem,
         ra_out => ra_mem
+    );
+
+    MEM_WB_PIPELINE: entity work.memwb_pipeline
+    port map (
+        clk => clk, rst => rst, enable => en,
+        
+        mem_data_in => in_port,     -- TODO: Change this to output from the memory
+        alu_result_in => alu_result_mem,
+        input_data => in_port,              -- Input data
+        wb_opr_in => wb_opr_mem,				    -- WB Operand
+        data_type_in => data_type_mem,          -- Decision between ALU data, memory data, for writeback
+        ra_in => ra_mem,					-- Register A address
+        
+        data_out => data,
+        wb_opr_out => wb_opr_to_reg,
+        ra_out => ra_to_reg
     );
 
 

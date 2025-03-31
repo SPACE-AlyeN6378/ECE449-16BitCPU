@@ -2,6 +2,7 @@
 @REM ANALYZE
 call 1_decode\decode_analyze.bat
 call 2_execute\execute_analyze.bat
+ghdl -a 3_store_wb\MEMWB_PIPE.vhd
 ghdl -a CPU.vhd
 
 @REM TESTBENCH

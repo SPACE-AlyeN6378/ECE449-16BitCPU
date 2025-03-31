@@ -16,7 +16,7 @@ entity idex_pipeline is
         alu_mode_in: in std_logic_vector(2 downto 0);	-- ALU Mode
         shift_count_in: in std_logic_vector(3 downto 0);
         mem_opr_in: in std_logic_vector(0 downto 0);	-- Memory write operand
-        mem_read_in: in std_logic;                      -- Read memory data, otherwise ALU data
+        data_type_in: in std_logic_vector(1 downto 0);  -- Decision between memory data, ALU data or input data during WB
         wb_opr_in: in std_logic;						-- WB Operand
         
         br_mode_in: in std_logic_vector(2 downto 0);	-- Branching type
@@ -27,7 +27,7 @@ entity idex_pipeline is
         alu_mode_out: out std_logic_vector(2 downto 0);	-- ALU Mode
         shift_count_out: out std_logic_vector(3 downto 0);
         mem_opr_out: out std_logic_vector(0 downto 0);	-- Memory operand
-        mem_read_out: out std_logic;
+        data_type_out: out std_logic_vector(1 downto 0);
         wb_opr_out: out std_logic;					-- Write-back Operand
 
         ra_in: in std_logic_vector(2 downto 0);
@@ -57,7 +57,7 @@ begin
         		alu_mode_out <= (others => '0');	-- ALU Mode
                 br_mode_out <= (others => '0');	    -- Branch enable mode
         		mem_opr_out <= (others => '0');		-- Memory operand
-                mem_read_out <= '0';                -- Memory read mode
+                data_type_out <= "00";                -- Memory read mode
         		wb_opr_out <= '0';		            -- WB Operand
                 ra_out <= (others => '0');
                 pc_address_out <= (others => '0');
@@ -70,7 +70,7 @@ begin
         		alu_mode_out <= alu_mode_in;		-- ALU Mode
                 br_mode_out <= br_mode_in;	        -- Branch enable mode
         		mem_opr_out <= mem_opr_in;			-- Memory operand
-                mem_read_out <= mem_read_in;        -- Memory read mode
+                data_type_out <= data_type_in;        -- Memory read mode
         		wb_opr_out <= wb_opr_in;			-- WB Operand
                 shift_count_out <= shift_count_in;
                 ra_out <= ra_in;

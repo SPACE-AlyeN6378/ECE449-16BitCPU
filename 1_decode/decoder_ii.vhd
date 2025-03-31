@@ -30,7 +30,7 @@ architecture Behavioral of DecoderII is
     -- L-Format
     constant LOAD: std_logic_vector(6 downto 0) := "0010000";
     constant STORE: std_logic_vector(6 downto 0) := "0010001";
-    constant LOADIMM: std_logic_vector(6 downto 0) := "0010010";
+    -- constant LOADIMM: std_logic_vector(6 downto 0) := "0010010";
     constant MOV : std_logic_vector(6 downto 0) := "0010011";
     -- **********************************************
 begin

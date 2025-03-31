@@ -12,7 +12,7 @@ port(
 
     alu_mode_out: out std_logic_vector(2 downto 0);
     mem_opr_out: out std_logic_vector(0 downto 0);
-    mem_read_out : out std_logic;
+    data_type_out : out std_logic_vector(1 downto 0);      -- Data type out
     wb_opr_out: out std_logic;
     br_active_out: out std_logic;
     br_mode_out : out std_logic_vector(2 downto 0);
@@ -44,7 +44,7 @@ architecture behavioural of decoder is
     
     signal alu_mode : std_logic_vector(2 downto 0);
     signal mem_opr : std_logic_vector(0 downto 0);
-    signal mem_read : std_logic;    -- To decide between ALU result and the memory data
+    signal data_type : std_logic_vector(1 downto 0);    -- Decides between ALU data, memory data or the input data
     signal wb_opr : std_logic; -- wb enable and reg enable
     signal br_active : std_logic;   -- activate branch
     signal disp : std_logic_vector(8 downto 0);
@@ -107,7 +107,7 @@ begin
             shift_count_out <= shift_count_in;
             alu_mode_out <= alu_mode;
             mem_opr_out <= mem_opr;
-            mem_read_out <= mem_read;    -- TODO: Uncomment this when output 
+            data_type_out <= data_type;
             wb_opr_out <= wb_opr;
             br_active_out <= br_active;
             disp_out <= disp;
@@ -121,7 +121,7 @@ begin
         alu_mode <= "000";
         br_mode <= "000";
         mem_opr <= "0";
-        mem_read <= '0';
+        data_type <= "00";
         wb_opr <= '0';
         br_active <= '0';
         disp <= (others => '0');
@@ -133,7 +133,7 @@ begin
                 alu_mode <= "000";
                 br_mode <= "000";
                 mem_opr <= "0";
-                mem_read <= '0';
+                data_type <= "00";
                 wb_opr <= '0';
                 br_active <= '0';
                 disp <= (others => '0');
@@ -143,7 +143,7 @@ begin
                 alu_mode <= "000";
                 br_mode <= "000";
                 mem_opr <= "0";
-                mem_read <= '0';
+                data_type <= "00";
                 wb_opr <= '0';
                 br_active <= '0';
                 disp <= (others => '0');
@@ -156,7 +156,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "000";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "00";
                         wb_opr <= '0';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -166,7 +166,7 @@ begin
                         alu_mode <= "001";
                         br_mode <= "000";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "01";
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -176,7 +176,7 @@ begin
                         alu_mode <= "010";
                         br_mode <= "000";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "01";
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -186,7 +186,7 @@ begin
                         alu_mode <= "011";
                         br_mode <= "000";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "01";
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -196,7 +196,7 @@ begin
                         alu_mode <= "100";
                         br_mode <= "000";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "01";
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -206,7 +206,7 @@ begin
                         alu_mode <= "101";
                         br_mode <= "000";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "01";
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -216,7 +216,7 @@ begin
                         alu_mode <= "110";
                         br_mode <= "000";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "01";
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -226,7 +226,7 @@ begin
                         alu_mode <= "111";
                         br_mode <= "000";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "00";
                         wb_opr <= '0';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -236,7 +236,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "000";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "00";
                         wb_opr <= '0';
                         br_active <= '1';
                         disp <= disp_l_in;
@@ -245,7 +245,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "001";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "00";
                         wb_opr <= '0';
                         br_active <= '1';
                         disp <= disp_l_in;
@@ -254,7 +254,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "010";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "00";
                         wb_opr <= '0';
                         br_active <= '1';
                         disp <= disp_l_in;
@@ -263,7 +263,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "011";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "00";
                         wb_opr <= '0';
                         br_active <= '1';
                         disp <= "000" & disp_s_in;
@@ -272,7 +272,7 @@ begin
                         alu_mode <= "111";
                         br_mode <= "100";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "00";
                         wb_opr <= '0';
                         br_active <= '1';
                         disp <= "000" & disp_s_in;
@@ -281,7 +281,7 @@ begin
                         alu_mode <= "111";
                         br_mode <= "101";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "00";
                         wb_opr <= '0';
                         br_active <= '1';
                         disp <= "000" & disp_s_in;
@@ -290,7 +290,7 @@ begin
                         alu_mode <= "001";
                         br_mode <= "110";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "01";
                         wb_opr <= '1';
                         br_active <= '1';
                         disp <= "000" & disp_s_in;
@@ -299,7 +299,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "111";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "00";
                         wb_opr <= '0';
                         br_active <= '1';
                         disp <= (others => '0');
@@ -308,7 +308,7 @@ begin
                         alu_mode <= "111";
                         br_mode <= "000";
                         mem_opr <= "0";
-                        mem_read <= '1';
+                        data_type <= "10";
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -317,7 +317,7 @@ begin
                         alu_mode <= "111";
                         br_mode <= "000";
                         mem_opr <= "1";
-                        mem_read <= '0';
+                        data_type <= "00";
                         wb_opr <= '0';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -326,7 +326,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "000";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "00";
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -335,7 +335,7 @@ begin
                         alu_mode <= "111";
                         br_mode <= "000";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "01";
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -344,7 +344,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "000";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "11";
                         wb_opr <= '1';
                         br_active <= '0';
                         disp <= (others => '0');
@@ -353,7 +353,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "000";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "00";
                         wb_opr <= '0'; -- temp
                         br_active <= '0';
                         disp <= (others => '0');
@@ -362,7 +362,7 @@ begin
                         alu_mode <= "000";
                         br_mode <= "000";
                         mem_opr <= "0";
-                        mem_read <= '0';
+                        data_type <= "00";
                         wb_opr <= '0';
                         br_active <= '0';
                         disp <= (others => '0');
