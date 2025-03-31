@@ -20,17 +20,19 @@ architecture behavioral of instruction_cache is
     -- You can modify these instructions as needed
     signal cache : cache_type := (
         -- Address 0: Start of program
-        0 => X"0000",
-        1 => X"0000",
+        0 => X"4280",
+        1 => X"42C0",
         2 => X"0000",
         3 => X"0000",
         4 => X"0000",
-        5 => X"4280",
-        6 => X"0242",
-        7 => X"0681",
-        8 => X"8AC5",
-        9 => X"04D0",
+        5 => X"0000",
+        6 => X"0253",
+        7 => X"0000",
+        8 => X"0000",
+        9 => X"0000",
         10 => X"0000",
+        11 => X"0E40",
+
 
         -- Fill the rest with NOPs
         others => X"0000"  -- NOP

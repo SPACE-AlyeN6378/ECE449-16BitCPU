@@ -20,6 +20,9 @@ end DecoderII;
 architecture Behavioral of DecoderII is
 
     -- ************* PREDEFINED OPCODES *************
+    -- A-Format
+    constant TEST : std_logic_vector(6 downto 0) := "0000111";
+    
     -- B-Format
     constant BR: std_logic_vector(6 downto 0) := "1000011";
     constant BR_N: std_logic_vector(6 downto 0) := "1000100";
@@ -37,7 +40,7 @@ begin
     process(opcode, ra, rb, rc, r_src, r_dest) begin
 
         -- If absolute branching is used, read the value stored in R[ra]
-        if (opcode = BR) or (opcode = BR_N) or (opcode = BR_Z) or (opcode = BR_SUB) then
+        if (opcode = BR) or (opcode = BR_N) or (opcode = BR_Z) or (opcode = BR_SUB) or (opcode = TEST) then
             rd_index1 <= ra;
             rd_index2 <= rc;
             

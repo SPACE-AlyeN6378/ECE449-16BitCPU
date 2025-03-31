@@ -53,33 +53,13 @@ begin
     stim_proc: process
     begin
     
-      -- INitialize the first branch
-      br_address_in <= std_logic_vector(to_signed(12, 9));
+      -- Input the following values
+      in_port <= std_logic_vector(to_unsigned(4, 16));
+      wait for 75 ns;   -- I just counted the clock period (7.5 clock cycles)
 
-      wr_en <= '1';
-      
-      wr_data <= std_logic_vector(to_unsigned(4, 16));
-      wr_reg_index <= std_logic_vector(to_unsigned(1, 3));
+      in_port <= std_logic_vector(to_unsigned(8, 16));
       wait for clk_period;
       
-      wr_data <= std_logic_vector(to_unsigned(6, 16));
-      wr_reg_index <= std_logic_vector(to_unsigned(2, 3));
-      wait for clk_period;
-      
-      wr_data <= std_logic_vector(to_unsigned(15, 16));
-      wr_reg_index <= std_logic_vector(to_unsigned(0, 3));
-      wait for clk_period;
-      
-      
-      wr_data <= std_logic_vector(to_unsigned(0, 16));
-      wr_reg_index <= std_logic_vector(to_unsigned(3, 3));
-      wait for clk_period;
-      
-      -- wr_reg_index <= std_logic_vector(to_unsigned(2, 3));
-      -- wr_data <= std_logic_vector(to_unsigned(6, 16));
-      -- wait until falling_edge(clk);
-      wr_reg_index <= std_logic_vector(to_unsigned(0, 3));
-      wr_en <= '0';
       wait for 22*clk_period;
 
       wait;

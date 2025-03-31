@@ -100,16 +100,17 @@ class AssemblyCode:
 
 code_block = """
 .code
-    NOP
-    NOP
-    NOP
-    NOP
-    NOP
     IN    r2
-    ADD   r1, r0, r2
-    MUL   r2, r0, r1
-    BR.Z  r3+5
-    SUB   r3, r2, r0
+    IN    r3
     NOP
+    NOP
+    NOP
+    NOP
+    ADD   r1, r2, r3
+    NOP
+    NOP
+    NOP
+    NOP
+    TEST  r1
 """
 AssemblyCode.assemble(code_block)

@@ -1,0 +1,49 @@
+v 4
+file . "cpu_tb.vhd" "dbd7da43294996930fb05c0a7cdfdd8ba08915be" "20250331091350.910":
+  entity cpu_tb at 2( 29) + 0 on 41;
+  architecture behavioural of cpu_tb at 10( 139) + 0 on 42;
+file . "3_store_wb\MEMWB_PIPE.vhd" "30120406a2cefca7732db6dbc3ac30eb1191c241" "20250331091350.734":
+  entity memwb_pipeline at 2( 25) + 0 on 37;
+  architecture behavioural of memwb_pipeline at 29( 1074) + 0 on 38;
+file . "./2_execute/EXMEM_PIPE.vhd" "175d0f86393564bc5cfe10fd21a6ed1b32e3eda0" "20250331091350.578":
+  entity exmem_pipeline at 1( 0) + 0 on 33;
+  architecture behavioural of exmem_pipeline at 32( 1363) + 0 on 34;
+file . "./2_execute/alu.vhd" "709fb11a291c9017eb911f609288a30cbc5dad87" "20250331091350.433":
+  entity alu_file at 1( 0) + 0 on 29;
+  architecture behavioral of alu_file at 24( 843) + 0 on 30;
+file . "./1_decode/IDEX_PIPE.vhd" "659055d72551558aeb564c9f95131734015a5640" "20250331091350.290":
+  entity idex_pipeline at 2( 25) + 0 on 25;
+  architecture behavioural of idex_pipeline at 48( 1908) + 0 on 26;
+file . "./1_decode/decoder_ii.vhd" "2f8f79f91af109679173c56c442a0fd7eab9f270" "20250331091350.167":
+  entity decoderii at 1( 0) + 0 on 21;
+  architecture behavioral of decoderii at 20( 526) + 0 on 22;
+file . "./0_fetch/cpu_stage1.vhd" "e34bf10bb09078cf6f14db571b9d300c629c999e" "20250331091349.944":
+  entity cpufetch at 1( 0) + 0 on 17;
+  architecture behavioral of cpufetch at 49( 1661) + 0 on 18;
+file . "./0_fetch/instr_cache.vhd" "97622ca4c4a492b45f2bb4b65b2027df14d7d8ec" "20250331091349.740":
+  entity instruction_cache at 1( 0) + 0 on 13;
+  architecture behavioral of instruction_cache at 15( 366) + 0 on 14;
+file . "./0_fetch/IFID_PIPE.vhd" "3d68f573d01c984dad5e29a5610197e8a844404d" "20250331091349.661":
+  entity ifid_pipeline_register at 2( 26) + 0 on 11;
+  architecture behavioural of ifid_pipeline_register at 47( 1665) + 0 on 12;
+file . "./0_fetch/program_counter.vhd" "539d90c7e96c75baf2ee189dd1d6c430c266d324" "20250331091349.852":
+  entity programcounter at 2( 26) + 0 on 15;
+  architecture behavioural of programcounter at 21( 473) + 0 on 16;
+file . "./1_decode/decoder.vhd" "23fb1ab93e3360e71cb918d4ba5dc7be9bf45217" "20250331091350.078":
+  entity decoder at 1( 0) + 0 on 19;
+  architecture behavioural of decoder at 41( 1349) + 0 on 20;
+file . "./1_decode/register.vhd" "dd8a21e0cfe778f59c168fb5576c41632cadf4fa" "20250331091350.210":
+  entity register_file at 1( 0) + 0 on 23;
+  architecture behavioural of register_file at 21( 573) + 0 on 24;
+file . "./1_decode/delta_comp.vhd" "100cae246e888fc5f2d26ed7a9326c8ff0f37544" "20250331091350.354":
+  entity deltacomponent at 2( 26) + 0 on 27;
+  architecture behavioural of deltacomponent at 16( 326) + 0 on 28;
+file . "./2_execute/branch_cu.vhd" "aa248773627b5e158e9eed364960e05a6335c4a5" "20250331091350.498":
+  entity branchcontrolunit at 1( 0) + 0 on 31;
+  architecture behavioral of branchcontrolunit at 26( 625) + 0 on 32;
+file . "./2_execute/execute.vhd" "eb47067531f15ecfa963ccc0edfd15d05c1ddb2f" "20250331091350.647":
+  entity executionstage at 1( 0) + 0 on 35;
+  architecture behavioral of executionstage at 44( 1958) + 0 on 36;
+file . "CPU.vhd" "d04d1d5d5c842f0de9725d4d4b2dcef791ce8340" "20250331091350.864":
+  entity cpu at 1( 0) + 0 on 39;
+  architecture behavioral of cpu at 38( 1118) + 0 on 40;
